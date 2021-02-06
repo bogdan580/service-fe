@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap');
+
+// themes - our custom or/and out of the box themes
+@import 'themes';
+
+// framework component themes (styles tied to theme variables)
+@import '~@nebular/theme/styles/globals';
+@import '~@nebular/auth/styles/all';
+
+@import '~@swimlane/ngx-datatable/index.css';
+//@import '~@swimlane/ngx-datatable/themes/bootstrap.css';
+//@import '~@swimlane/ngx-datatable/themes/dark.scss';
+@import '~@swimlane/ngx-datatable/themes/material.css';
+@import '~@swimlane/ngx-datatable/assets/icons.css';
+
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+@import '~bootstrap/scss/grid';
+
+// loading progress bar theme
+@import './pace.theme';
+
+@import './layout';
+@import './overrides';
+
+// install the framework and custom global styles
+@include nb-install() {
+
+  // framework global styles
+  @include nb-theme-global();
+  @include nb-auth-global();
+
+  @include ngx-layout();
+  // loading progress bar
+  @include ngx-pace-theme();
+
+  @include nb-overrides();
+}
+
+;
+
+// *** NGX-DATA-TABLE ***
+.ngx-datatable.material {
+  box-shadow: none;
+  border: 1px solid #edf1f7;
+}
+
+.ngx-datatable.material {
+  .datatable-header .datatable-header-cell {
+    padding: 0.5rem 1rem;
+    font-size: small;
+  }
+
+  /*.datatable-body .datatable-body-row .datatable-body-cell {
+    padding: 0.4rem 1rem; // for smaller row padding
+  }*/
+}
+
+

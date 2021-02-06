@@ -83,20 +83,17 @@
       }
     },
     "typedef": [
-      true,
-      "call-signature"
+      true
     ],
     "typedef-whitespace": {
       "options": [
         {
-          "call-signature": "nospace",
           "index-signature": "nospace",
           "parameter": "nospace",
           "property-declaration": "nospace",
           "variable-declaration": "nospace"
         },
         {
-          "call-signature": "onespace",
           "index-signature": "onespace",
           "parameter": "onespace",
           "property-declaration": "onespace",
@@ -140,12 +137,14 @@
       true,
       "attribute",
       "app",
+      "ngx",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
       "app",
+      "ngx",
       "kebab-case"
     ]
   }

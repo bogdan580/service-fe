@@ -7,30 +7,57 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
+          "prefix": "ngx",
           "style": "scss"
+        },
+        "@schematics/angular:directive": {
+          "prefix": "ngx"
         }
       },
       "root": "",
       "sourceRoot": "src",
-      "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/service-front",
+            "aot": true,
+            "preserveSymlinks": true,
+            "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": true,
             "assets": [
+              "src/assets",
               "src/favicon.ico",
-              "src/assets"
+              "src/favicon.png",
+              {
+                "glob": "**/*",
+                "input": "node_modules/leaflet/dist/images",
+                "output": "/assets/img/markers"
+              }
             ],
             "styles": [
-              "src/styles.scss"
+              "node_modules/bootstrap/dist/css/bootstrap.css",
+              "node_modules/typeface-exo/index.css",
+              "node_modules/roboto-fontface/css/roboto/roboto-fontface.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.css",
+              "node_modules/socicon/css/socicon.css",
+              "node_modules/nebular-icons/scss/nebular-icons.scss",
+              "node_modules/pace-js/templates/pace-theme-flash.tmpl.css",
+              "src/app/@theme/styles/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/pace-js/pace.min.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "angular2-chartjs",
+              "echarts",
+              "lodash",
+              "zrender/lib/svg/svg",
+              "zrender/lib/vml/vml",
+              "style-loader!leaflet/dist/leaflet.css"
+            ]
           },
           "configurations": {
             "production": {
@@ -84,24 +111,39 @@
           "options": {
             "main": "src/test.ts",
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.spec.json",
+            "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
+          "scripts": [
+            "node_modules/pace-js/pace.min.js"
             ],
             "styles": [
-              "src/styles.scss"
+              "node_modules/bootstrap/dist/css/bootstrap.css",
+              "node_modules/typeface-exo/index.css",
+              "node_modules/roboto-fontface/css/roboto/roboto-fontface.css",
+              "node_modules/font-awesome/scss/font-awesome.scss",
+              "node_modules/socicon/css/socicon.css",
+              "node_modules/nebular-icons/scss/nebular-icons.scss",
+              "node_modules/pace-js/templates/pace-theme-flash.tmpl.css",
+              "src/app/@theme/styles/styles.scss"
             ],
-            "scripts": []
+            "assets": [
+              "src/assets",
+              "src/favicon.ico",
+              "src/favicon.png",
+              {
+                "glob": "**/*",
+                "input": "node_modules/leaflet/dist/images",
+                "output": "/assets/img/markers"
+              }
+            ]
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
+              "src/tsconfig.app.json",
+              "src/tsconfig.spec.json",
               "e2e/tsconfig.json"
             ],
             "exclude": [

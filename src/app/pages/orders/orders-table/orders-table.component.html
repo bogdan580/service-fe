@@ -1,0 +1,25 @@
+<nb-card>
+  <nb-card-header>
+    Замовлення
+    <button class="float-right" nbButton status="basic" size="tiny" [nbPopover]="form">Columns</button>
+  </nb-card-header>
+  <nb-card-body>
+
+    <ngx-datatable class="material" [headerHeight]="50" [footerHeight]="50" rowHeight="auto"
+                   [rows]="rows" [columns]="columns" [loadingIndicator]="loadingIndicator"
+                   [columnMode]="ColumnMode.force" [externalPaging]="true"
+                   [offset]="page.number" [limit]="page.size" [count]="page.totalElements"
+                   (page)="setPage($event)" (sort)="sortPage($event)">
+      <ngx-datatable-column *ngFor="let col of columns" [prop]="col.prop" [name]="col.name"></ngx-datatable-column>
+    </ngx-datatable>
+  </nb-card-body>
+</nb-card>
+
+<ng-template #form>
+  <div class="p-3 overflow-auto h-100">
+
+    <div class="form-group" *ngFor="let col of allColumns; let id = index">
+      <nb-checkbox [id]="id" (checkedChange)="toggle(col)" [checked]="isChecked(col)">{{col.name}}</nb-checkbox>
+    </div>
+  </div>
+</ng-template>
