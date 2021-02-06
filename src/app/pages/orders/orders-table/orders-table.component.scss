@@ -6,15 +6,18 @@
   }
 }
 
-table{
-  width:100%;
+table {
+  width: 100%;
 }
-#example_filter{
-  float:right;
+
+#example_filter {
+  float: right;
 }
-#example_paginate{
-  float:right;
+
+#example_paginate {
+  float: right;
 }
+
 label {
   display: inline-flex;
   margin-bottom: .5rem;
@@ -22,3 +25,11 @@ label {
 
 }
 
+.select-page-size {
+  position: absolute;
+  right: 140px;
+  top: 18px;
+  .select-button {
+    min-width: 1rem!important;
+  }
+}

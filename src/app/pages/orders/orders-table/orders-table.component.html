@@ -2,14 +2,63 @@
   <nb-card-header>
     Замовлення
     <button class="float-right" nbButton status="basic" size="tiny" [nbPopover]="form">Columns</button>
+    <nb-select class="select-page-size" size="tiny" [(ngModel)]="page.size" (selectedChange)="setPage({offset: page.number})" selected="10">
+      <nb-option [value]="10">10</nb-option>
+      <nb-option [value]="25">25</nb-option>
+    </nb-select>
   </nb-card-header>
   <nb-card-body>
 
-    <ngx-datatable class="material" [headerHeight]="50" [footerHeight]="50" rowHeight="auto"
+    <ngx-datatable #orderTable class="material" [headerHeight]="50" [footerHeight]="50" rowHeight="auto"
                    [rows]="rows" [columns]="columns" [loadingIndicator]="loadingIndicator"
                    [columnMode]="ColumnMode.force" [externalPaging]="true"
                    [offset]="page.number" [limit]="page.size" [count]="page.totalElements"
                    (page)="setPage($event)" (sort)="sortPage($event)">
+      <!-- Row Detail Template -->
+      <ngx-datatable-row-detail [rowHeight]="'auto'" #myDetailRow (toggle)="onDetailToggle($event)">
+        <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+          <div style="padding-left:35px;">
+            <div class="row m-0">
+              <div class="col"><strong>Несправність</strong> {{ row.defect }}</div>
+              <div class="col"><strong>Дата прийому</strong> {{ row.receiptDate }}</div>
+            </div>
+            <div class="row m-0">
+              <div class="col"><strong>Комплектація</strong> {{ row.equipment }}</div>
+              <div class="col"><strong>Дата повернення</strong> {{ row.returnDate }}</div>
+            </div>
+            <div class="row m-0">
+              <div class="col"><strong>Орієнтовна вартість</strong> {{ row.estimatedCost }}</div>
+              <div class="col"><strong>Собівартість</strong> {{ row.realCost }}</div>
+            </div>
+            <div class="row m-0">
+              <div class="col"><strong>Виконана робота</strong> {{ row.performWork }}</div>
+              <div class="col"><strong>Вартість для клієнта</strong> {{ row.finalCost }}</div>
+            </div>
+            <div class="row m-0">
+              <div class="col"><strong>Email</strong> {{ row.client.email }}</div>
+            </div>
+          </div>
+        </ng-template>
+      </ngx-datatable-row-detail>
+      <!-- Column Templates -->
+      <ngx-datatable-column
+        [width]="50"
+        [resizeable]="false"
+        [sortable]="false"
+        [draggable]="false"
+        [canAutoResize]="false"
+      >
+        <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+          <span
+            [class.datatable-icon-right]="!expanded"
+            [class.datatable-icon-down]="expanded"
+            title="Expand/Collapse Row"
+            (click)="toggleExpandRow(row)"
+            class="row-expander"
+          >
+          </span>
+        </ng-template>
+      </ngx-datatable-column>
       <ngx-datatable-column *ngFor="let col of columns" [prop]="col.prop" [name]="col.name"></ngx-datatable-column>
     </ngx-datatable>
   </nb-card-body>

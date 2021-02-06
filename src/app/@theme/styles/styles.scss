@@ -44,6 +44,18 @@
 .ngx-datatable.material {
   box-shadow: none;
   border: 1px solid #edf1f7;
+
+  .row-expander{
+    &::before {
+      padding: 3px;
+      font-size: medium;
+      border-radius: 50px;
+    }
+    &:hover::before{
+      background: #d6d6d6;
+
+    }
+  }
 }
 
 .ngx-datatable.material {
@@ -57,4 +69,12 @@
   }*/
 }
 
+// *** page size ***
+.select-button {
+  min-width: 1rem;
+}
 
+// *** text in button ***
+.nb-theme-default [nbButton].appearance-filled.status-basic{
+  overflow: hidden;
+}

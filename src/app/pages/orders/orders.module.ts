@@ -1,9 +1,10 @@
 import {NgModule} from '@angular/core';
-import {NbButtonModule, NbCardModule, NbCheckboxModule, NbIconModule, NbInputModule, NbPopoverModule} from '@nebular/theme';
+import {NbButtonModule, NbCardModule, NbCheckboxModule, NbIconModule, NbInputModule, NbPopoverModule, NbSelectModule} from '@nebular/theme';
 
 import {ThemeModule} from '../../@theme/theme.module';
 import {OrdersRoutingModule, routedComponents} from './orders-routing.module';
 import {NgxDatatableModule} from '@swimlane/ngx-datatable';
+import {FormsModule} from '@angular/forms';
 
 
 @NgModule({
@@ -17,6 +18,8 @@ import {NgxDatatableModule} from '@swimlane/ngx-datatable';
     NbPopoverModule,
     NbButtonModule,
     NbCheckboxModule,
+    NbSelectModule,
+    FormsModule,
   ],
   declarations: [
     ...routedComponents,

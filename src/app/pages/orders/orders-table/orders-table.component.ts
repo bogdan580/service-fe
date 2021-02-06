@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild, ViewEncapsulation} from '@angular/core';
 import {ApiService, Page} from '../../../@core/data/api.service';
 import {environment} from '../../../../environments/environment';
 import {ColumnMode} from '@swimlane/ngx-datatable';
@@ -6,7 +6,7 @@ import {ColumnMode} from '@swimlane/ngx-datatable';
 @Component({
   selector: 'app-orders-table',
   templateUrl: './orders-table.component.html',
-  styleUrls: ['./orders-table.component.scss'],
+  styleUrls: ['./orders-table.component.scss']
 })
 export class OrdersTableComponent {
 
@@ -27,7 +27,7 @@ export class OrdersTableComponent {
      }
    };*/
 
-
+  @ViewChild('orderTable') table: any;
   baseUrl = environment.REST_API_URL;
 
   page = new Page();
@@ -35,24 +35,31 @@ export class OrdersTableComponent {
   loadingIndicator = true;
   allColumns = [
     {prop: 'id', name: 'ID'},
-    {prop: 'model', name: 'Модель'},
     {prop: 'client.name', name: 'Name'},
     {prop: 'client.phone', name: 'Phone'},
-    {prop: 'client.email', name: 'Email'},
     {prop: 'device', name: 'Тип пристрою'},
-    {prop: 'defect', name: 'Несправність'},
+    {prop: 'model', name: 'Модель'},
     {prop: 'deviceId', name: 'IMEI'},
     {prop: 'status', name: 'Статус'},
-    {prop: 'receiptDate', name: 'Дата прийому'},
     {prop: 'isExpress', name: 'Терміновий'},
+
+    {prop: 'defect', name: 'Несправність'},
+    {prop: 'receiptDate', name: 'Дата прийому'},
+    {prop: 'estimatedCost', name: 'Орієнтовна вартість'},
+    {prop: 'returnDate', name: 'Дата повернення'},
+    {prop: 'equipment', name: 'Комплектація'},
+    {prop: 'realCost', name: 'Собівартість'},
+    {prop: 'finalCost', name: 'Ціна для клієнта'},
+    {prop: 'performWork', name: 'Виконана робота'},
+    {prop: 'client.email', name: 'Email'},
   ];
   columns = [
     {prop: 'id', name: 'ID'},
-    {prop: 'model', name: 'Модель'},
     {prop: 'client.name', name: 'Name'},
     {prop: 'client.phone', name: 'Phone'},
     {prop: 'device', name: 'Тип пристрою'},
-    {prop: 'defect', name: 'Несправність'},
+    {prop: 'model', name: 'Модель'},
+    {prop: 'deviceId', name: 'IMEI'},
     {prop: 'status', name: 'Статус'},
     {prop: 'isExpress', name: 'Терміновий'},
     ];
@@ -110,5 +117,14 @@ export class OrdersTableComponent {
         return c.name === col.name;
       }) !== undefined
     );
+  }
+
+  toggleExpandRow(row) {
+    console.log('Toggled Expand Row!', row);
+    this.table.rowDetail.toggleExpandRow(row);
+  }
+
+  onDetailToggle(event) {
+    console.log('Detail Toggled', event);
   }
 }
