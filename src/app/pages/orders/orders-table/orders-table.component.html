@@ -1,11 +1,20 @@
 <nb-card>
   <nb-card-header>
     Замовлення
-    <button class="float-right" nbButton status="basic" size="tiny" [nbPopover]="form">Columns</button>
+    <input nbInput type="text" fieldSize="small" class="ml-2"
+           placeholder="Знайди клієнта (по ПІБ)"
+           (input)="filterClient($event)">
+    <input nbInput type="text" fieldSize="small" class="ml-2"
+           placeholder="Знайди по телефону"
+           (input)="filterPhone($event)">
+    <button class="change-columns-btn" nbButton status="basic" size="tiny" [nbPopover]="form">Columns</button>
+    <button nbButton status="success" class="float-right" size="tiny" (click)="openNewForm()">Нове замовлення</button>
     <nb-select class="select-page-size" size="tiny" [(ngModel)]="page.size" (selectedChange)="setPage({offset: page.number})" selected="10">
       <nb-option [value]="10">10</nb-option>
       <nb-option [value]="25">25</nb-option>
     </nb-select>
+    <button nbButton status="info" class="edit-order-btn" size="tiny"
+            *ngIf="selected.length === 1" (click)="openEditForm()">Редагувати</button>
   </nb-card-header>
   <nb-card-body>
 
@@ -13,9 +22,10 @@
                    [rows]="rows" [columns]="columns" [loadingIndicator]="loadingIndicator"
                    [columnMode]="ColumnMode.force" [externalPaging]="true"
                    [offset]="page.number" [limit]="page.size" [count]="page.totalElements"
+                   [selected]="selected" [selectionType]="SelectionType.multi" (select)="onSelect($event)"
                    (page)="setPage($event)" (sort)="sortPage($event)">
       <!-- Row Detail Template -->
-      <ngx-datatable-row-detail [rowHeight]="'auto'" #myDetailRow (toggle)="onDetailToggle($event)">
+      <ngx-datatable-row-detail rowHeight="auto" #myDetailRow (toggle)="onDetailToggle($event)">
         <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
           <div style="padding-left:35px;">
             <div class="row m-0">

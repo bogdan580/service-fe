@@ -64,6 +64,12 @@
     font-size: small;
   }
 
+  &.multi-selection .datatable-body-row.active:hover .datatable-row-group,
+  &.multi-selection .datatable-body-row.active .datatable-row-group,
+  &.single-selection .datatable-body-row.active .datatable-row-group{
+    background-color: #6d91ff;
+  }
+
   /*.datatable-body .datatable-body-row .datatable-body-cell {
     padding: 0.4rem 1rem; // for smaller row padding
   }*/
@@ -71,10 +77,15 @@
 
 // *** page size ***
 .select-button {
-  min-width: 1rem;
+  min-width: 1rem!important;
 }
 
 // *** text in button ***
 .nb-theme-default [nbButton].appearance-filled.status-basic{
   overflow: hidden;
+}
+
+// *** delete padding bottom in order form ***
+.form-order nb-card-body{
+  padding-bottom: 0!important;
 }

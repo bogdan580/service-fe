@@ -1,0 +1,17 @@
+@import '../../../../@theme/styles/themes';
+
+@include nb-install-component() {
+  ::ng-deep .form {
+    display: flex;
+    flex-direction: column;
+
+    .text-label {
+      margin-top: 1.5rem;
+    }
+  }
+}
+
+:host::ng-deep nb-accordion{
+  box-shadow: none;
+  border: 1px solid #edf1f7;
+}

@@ -1,0 +1,127 @@
+<form class="form" style="max-height: 80vh;">
+  <div class="row" hidden>
+    <div class="col form-group">
+      <input nbInput fullWidth placeholder="ID" [value]="order.id" disabled>
+    </div>
+    <div class="col form-group">
+      <input nbInput type="text" fullWidth [value]="order.status" disabled>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col form-group">
+      <label>Клієнт
+      <input #nameInput nbInput type="text" name="nameInput"
+             fullWidth placeholder="Клієнт (ПІБ)"
+             [nbAutocomplete]="autoName" (input)="findClient()" [(ngModel)]="order.client.name">
+      <nb-autocomplete #autoName (selectedChange)="onNameChange($event)">
+        <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option">
+          {{ option }}
+        </nb-option>
+      </nb-autocomplete>
+      </label>
+    </div>
+    <div class="col form-group">
+      <label>Телефон
+      <input nbInput type="tel" name="phoneInput" fullWidth placeholder="Телефон" [(ngModel)]="order.client.phone">
+      </label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-3 form-group">
+      <nb-select selected="PHONE" fullWidth name="deviceInput" [(ngModel)]="order.device">
+        <nb-option value="PHONE">Телефон</nb-option>
+        <nb-option value="TABLET">Планшет</nb-option>
+        <nb-option value="LAPTOP">Ноутбук</nb-option>
+      </nb-select>
+    </div>
+    <div class="col-3 form-group text-center">
+      <nb-checkbox style="top: .5em;position: relative;" status="danger" name="isExpressInput" [(ngModel)]="order.isExpress">
+        Терміновий
+      </nb-checkbox>
+    </div>
+    <div class="col form-group">
+      <label>Email
+      <input nbInput type="email" name="emailInput" fullWidth placeholder="Email" [(ngModel)]="order.client.email">
+      </label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col form-group">
+      <label>Модель
+      <input nbInput type="text" name="modelInput" fullWidth placeholder="Модель" [(ngModel)]="order.model">
+      </label>
+    </div>
+    <div class="col form-group">
+      <label>IMEI
+      <input nbInput type="text" name="imeiInput" fullWidth placeholder="IMEI" [(ngModel)]="order.deviceId">
+      </label>
+    </div>
+  </div>
+  <nb-accordion>
+    <nb-accordion-item>
+      <nb-accordion-item-header>
+        Додаткова інформація
+      </nb-accordion-item-header>
+      <nb-accordion-item-body>
+        <div class="row">
+          <div class="col form-group">
+            <label>Дата прийому
+              <input nbInput fullWidth placeholder="Дата прийому" name="receiptDateInput"
+                     [nbDatepicker]="receiptDatePicker" [(ngModel)]="order.receiptDate">
+            </label>
+            <nb-datepicker #receiptDatePicker></nb-datepicker>
+          </div>
+          <div class="col form-group">
+            <label>Дата повернення
+              <input nbInput fullWidth placeholder="Дата повернення" name="returnDateInput"
+                     [nbDatepicker]="returnDatePicker" [(ngModel)]="order.returnDate">
+            </label>
+            <nb-datepicker #returnDatePicker></nb-datepicker>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col form-group">
+            <label>Комплектація
+            <input nbInput type="text" name="equipmentInput" fullWidth placeholder="Комплектація" [(ngModel)]="order.equipment">
+            </label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col form-group">
+            <label>Орієнтовна вартість
+              <input nbInput type="number" name="estimatedCostInput" fullWidth placeholder="Орієнтовна вартість" [(ngModel)]="order.estimatedCost">
+            </label>
+          </div>
+          <div class="col form-group">
+            <label>Собівартість
+              <input nbInput type="number" name="realCostInput" fullWidth placeholder="Собівартість" [(ngModel)]="order.realCost">
+            </label>
+          </div>
+          <div class="col form-group">
+            <label>Ціна для клієнта
+              <input nbInput type="number" name="finalCostInput" fullWidth placeholder="Ціна для клієнта" [(ngModel)]="order.finalCost">
+            </label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col form-group">
+            <label>Несправність
+              <textarea nbInput fullWidth name="defectInput" placeholder="Несправність" [(ngModel)]="order.defect"></textarea>
+            </label>
+          </div>
+          <div class="col form-group">
+            <label>Виконана робота
+              <textarea nbInput fullWidth name="performWorkInput" placeholder="Виконана робота" [(ngModel)]="order.performWork"></textarea>
+            </label>
+          </div>
+        </div>
+      </nb-accordion-item-body>
+    </nb-accordion-item>
+  </nb-accordion>
+  <hr class="w-100">
+  <div class="row pb-3">
+    <div class="col text-right">
+      <button nbButton status="success" (click)="saveOrder()">{{order.id ? 'Зберегти' : 'Додати'}}</button>
+    </div>
+  </div>
+</form>

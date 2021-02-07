@@ -27,9 +27,18 @@ label {
 
 .select-page-size {
   position: absolute;
-  right: 140px;
-  top: 18px;
-  .select-button {
-    min-width: 1rem!important;
-  }
+  right: 15.3rem;
+  top: 0.9rem;
+}
+
+.change-columns-btn {
+  position: absolute;
+  right: 10rem;
+  top: 1rem;
+}
+
+.edit-order-btn{
+  position: absolute;
+  right: 20rem;
+  top: 1rem;
 }

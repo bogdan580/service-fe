@@ -1,7 +1,10 @@
 import {Component, ViewChild, ViewEncapsulation} from '@angular/core';
 import {ApiService, Page} from '../../../@core/data/api.service';
 import {environment} from '../../../../environments/environment';
-import {ColumnMode} from '@swimlane/ngx-datatable';
+import {ColumnMode, SelectionType} from '@swimlane/ngx-datatable';
+import {NbWindowRef, NbWindowService} from '@nebular/theme';
+import {OrderFormComponent} from './order-form/order-form.component';
+import {Order} from '../../../@core/data/order';
 
 @Component({
   selector: 'app-orders-table',
@@ -10,33 +13,20 @@ import {ColumnMode} from '@swimlane/ngx-datatable';
 })
 export class OrdersTableComponent {
 
-  /* settings = {
-     add: {
-       addButtonContent: '<i class="nb-plus"></i>',
-       createButtonContent: '<i class="nb-checkmark"></i>',
-       cancelButtonContent: '<i class="nb-close"></i>',
-     },
-     edit: {
-       editButtonContent: '<i class="nb-edit"></i>',
-       saveButtonContent: '<i class="nb-checkmark"></i>',
-       cancelButtonContent: '<i class="nb-close"></i>',
-     },
-     delete: {
-       deleteButtonContent: '<i class="nb-trash"></i>',
-       confirmDelete: true,
-     }
-   };*/
-
   @ViewChild('orderTable') table: any;
   baseUrl = environment.REST_API_URL;
 
+  selected = [];
+  lastSelectId: number;
+
   page = new Page();
   ColumnMode = ColumnMode;
+  SelectionType = SelectionType;
   loadingIndicator = true;
   allColumns = [
     {prop: 'id', name: 'ID'},
-    {prop: 'client.name', name: 'Name'},
-    {prop: 'client.phone', name: 'Phone'},
+    {prop: 'client.name', name: 'Клієнт'},
+    {prop: 'client.phone', name: 'Телефон'},
     {prop: 'device', name: 'Тип пристрою'},
     {prop: 'model', name: 'Модель'},
     {prop: 'deviceId', name: 'IMEI'},
@@ -55,17 +45,17 @@ export class OrdersTableComponent {
   ];
   columns = [
     {prop: 'id', name: 'ID'},
-    {prop: 'client.name', name: 'Name'},
-    {prop: 'client.phone', name: 'Phone'},
+    {prop: 'client.name', name: 'Клієнт'},
+    {prop: 'client.phone', name: 'Телефон'},
     {prop: 'device', name: 'Тип пристрою'},
     {prop: 'model', name: 'Модель'},
     {prop: 'deviceId', name: 'IMEI'},
     {prop: 'status', name: 'Статус'},
     {prop: 'isExpress', name: 'Терміновий'},
-    ];
-  rows: any[];
+  ];
+  rows: Order[];
 
-  constructor(private apiService: ApiService) {
+  constructor(private apiService: ApiService, private windowService: NbWindowService) {
     this.page.number = 0;
     this.page.size = 10;
 
@@ -126,5 +116,31 @@ export class OrdersTableComponent {
 
   onDetailToggle(event) {
     console.log('Detail Toggled', event);
+  }
+
+  openNewForm() {
+    this.windowService.open(OrderFormComponent, {title: `Нове замовлення`, windowClass: 'form-order'});
+  }
+
+  openEditForm() {
+    this.windowService.open(OrderFormComponent,
+      {title: `Редагуй замовлення #` + this.selected[0].id, windowClass: 'form-order', context: {initialData: this.selected[0]}});
+  }
+
+  onSelect({selected}) {
+    if (this.lastSelectId === selected[0].id) {
+      this.selected = [];
+      this.lastSelectId = null;
+    } else {
+      this.lastSelectId = selected[0].id;
+    }
+  }
+
+  filterClient(event: any) {
+    console.log('Client', event);
+  }
+
+  filterPhone(event: any) {
+    console.log('Tel', event);
   }
 }
