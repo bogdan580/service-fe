@@ -1,10 +1,11 @@
-import {Component, ViewChild, ViewEncapsulation} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {ApiService, Page} from '../../../@core/data/api.service';
 import {environment} from '../../../../environments/environment';
 import {ColumnMode, SelectionType} from '@swimlane/ngx-datatable';
-import {NbWindowRef, NbWindowService} from '@nebular/theme';
+import {NbWindowService} from '@nebular/theme';
 import {OrderFormComponent} from './order-form/order-form.component';
 import {Order} from '../../../@core/data/order';
+import {BehaviorSubject} from 'rxjs';
 
 @Component({
   selector: 'app-orders-table',
@@ -54,12 +55,15 @@ export class OrdersTableComponent {
     {prop: 'isExpress', name: 'Терміновий'},
   ];
   rows: Order[];
+  refreshSubject: BehaviorSubject<string> = new BehaviorSubject<string>('init orders');
 
   constructor(private apiService: ApiService, private windowService: NbWindowService) {
     this.page.number = 0;
     this.page.size = 10;
-
-    this.setPage({offset: 0});
+    this.refreshSubject.subscribe((res) => {
+      console.log('[refreshSubject] ', res);
+      this.setPage({offset: 0});
+    });
   }
 
   onDeleteConfirm(event): void {
@@ -119,12 +123,19 @@ export class OrdersTableComponent {
   }
 
   openNewForm() {
-    this.windowService.open(OrderFormComponent, {title: `Нове замовлення`, windowClass: 'form-order'});
+    this.windowService.open(OrderFormComponent,
+      {
+        title: `Нове замовлення`, windowClass: 'form-order',
+        context: {refresh: this.refreshSubject}
+      });
   }
 
   openEditForm() {
     this.windowService.open(OrderFormComponent,
-      {title: `Редагуй замовлення #` + this.selected[0].id, windowClass: 'form-order', context: {initialData: this.selected[0]}});
+      {
+        title: `Редагуй замовлення #` + this.selected[0].id, windowClass: 'form-order',
+        context: {initialData: this.selected[0], refresh: this.refreshSubject}
+      });
   }
 
   onSelect({selected}) {

@@ -7,7 +7,7 @@
     <input nbInput type="text" fieldSize="small" class="ml-2"
            placeholder="Знайди по телефону"
            (input)="filterPhone($event)">
-    <button class="change-columns-btn" nbButton status="basic" size="tiny" [nbPopover]="form">Columns</button>
+    <button class="change-columns-btn" nbButton status="basic" size="tiny" [nbPopover]="cols">Columns</button>
     <button nbButton status="success" class="float-right" size="tiny" (click)="openNewForm()">Нове замовлення</button>
     <nb-select class="select-page-size" size="tiny" [(ngModel)]="page.size" (selectedChange)="setPage({offset: page.number})" selected="10">
       <nb-option [value]="10">10</nb-option>
@@ -74,7 +74,7 @@
   </nb-card-body>
 </nb-card>
 
-<ng-template #form>
+<ng-template #cols>
   <div class="p-3 overflow-auto h-100">
 
     <div class="form-group" *ngFor="let col of allColumns; let id = index">
