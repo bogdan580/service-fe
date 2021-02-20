@@ -1,10 +1,10 @@
-import {Component, Input, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {NbWindowRef} from '@nebular/theme';
-import {Observable, of} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {Order} from '../../../../@core/data/order';
+import {Observable} from 'rxjs';
+import {Client, Order} from '../../../../@core/data/order';
 import {ApiService} from '../../../../@core/data/api.service';
 import {environment} from '../../../../../environments/environment';
+import {map} from 'rxjs/operators';
 
 @Component({
   templateUrl: './order-form.component.html',
@@ -12,8 +12,8 @@ import {environment} from '../../../../../environments/environment';
 })
 export class OrderFormComponent {
   baseUrl = environment.REST_API_URL;
-  options: string[];
-  filteredOptions$: Observable<string[]>;
+  clients: Client[];
+  filteredOptions$: Observable<Client[]>;
   order: Order = {
     id: null,
     client: {
@@ -36,11 +36,7 @@ export class OrderFormComponent {
     status: 'INCOMING'
   };
 
-  @ViewChild('nameInput') input;
-
   constructor(public windowRef: NbWindowRef, private apiService: ApiService) {
-    this.options = ['Mykola Bohdan', 'Roman Palamarchuk', 'Testowy Client'];
-    this.filteredOptions$ = of(this.options);
     // @ts-ignore
     console.log('initialData:', this.windowRef.config.context.initialData);
     // @ts-ignore
@@ -50,11 +46,11 @@ export class OrderFormComponent {
     }
   }
 
-  refreshOrders(){
+  refreshOrders() {
     // @ts-ignore
     if (this.windowRef.config.context.refresh) {
       // @ts-ignore
-      this.windowRef.config.context.refresh.next('need to refresh orders');
+      this.windowRef.config.context.refresh.next('Orders need to refresh...');
     }
   }
 
@@ -62,23 +58,75 @@ export class OrderFormComponent {
     this.windowRef.close();
   }
 
-  private filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.options.filter(optionValue => optionValue.toLowerCase().includes(filterValue));
+  /*  options: string[];
+      filteredOptions$: Observable<string[]>;
+
+      tmpConstructor() {
+       this.options = ['Mykola Bohdan', 'Roman Palamarchuk', 'Testowy Client'];
+       this.filteredOptions$ = of(this.options);
+      }
+
+    private filter(value: string): string[] {
+      const filterValue = value.toLowerCase();
+      return this.options.filter(optionValue => optionValue.toLowerCase().includes(filterValue));
+    }
+
+    getFilteredOptions(value: string): Observable<string[]> {
+      return of(value).pipe(
+        map(filterString => this.filter(filterString)),
+      );
+    }
+
+    findBy(){
+      this.filteredOptions$ = this.getFilteredOptions(this.input.nativeElement.value);
+    }*/
+
+  findClientByName(event: Event) {
+    this.filteredOptions$ = this.apiService.post(this.baseUrl + '/orders/findClient',
+      {
+        name: (event.target as HTMLInputElement).value,
+        phone: this.order.client.phone,
+        email: this.order.client.email
+      }).pipe(map(clients => this.clients = clients));
   }
 
-  getFilteredOptions(value: string): Observable<string[]> {
-    return of(value).pipe(
-      map(filterString => this.filter(filterString)),
-    );
+  findClientByPhone(event: Event) {
+    this.filteredOptions$ = this.apiService.post(this.baseUrl + '/orders/findClient',
+      {
+        name: this.order.client.name,
+        phone: (event.target as HTMLInputElement).value,
+        email: this.order.client.email
+      }).pipe(map(clients => this.clients = clients));
   }
 
-  findClient() {
-    this.filteredOptions$ = this.getFilteredOptions(this.input.nativeElement.value);
+  findClientByEmail(event: Event) {
+    this.filteredOptions$ = this.apiService.post(this.baseUrl + '/orders/findClient',
+      {
+        name: this.order.client.name,
+        phone: this.order.client.phone,
+        email: (event.target as HTMLInputElement).value
+      }).pipe(map(clients => this.clients = clients));
   }
 
-  onNameChange($event) {
-    this.filteredOptions$ = this.getFilteredOptions($event);
+  onNameChange(name) {
+    const foundClients = this.clients.filter(cl => cl.name === name);
+    if (foundClients.length === 1) {
+      this.order.client = foundClients[0];
+    }
+  }
+
+  onPhoneChange(phone) {
+    const foundClients = this.clients.filter(cl => cl.phone === phone);
+    if (foundClients.length === 1) {
+      this.order.client = foundClients[0];
+    }
+  }
+
+  onEmailChange(email) {
+    const foundClients = this.clients.filter(cl => cl.email === email);
+    if (foundClients.length === 1) {
+      this.order.client = foundClients[0];
+    }
   }
 
   saveOrder() {

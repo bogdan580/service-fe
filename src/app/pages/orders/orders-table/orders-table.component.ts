@@ -6,6 +6,7 @@ import {NbWindowService} from '@nebular/theme';
 import {OrderFormComponent} from './order-form/order-form.component';
 import {Order} from '../../../@core/data/order';
 import {BehaviorSubject} from 'rxjs';
+import {HttpParams} from '@angular/common/http';
 
 @Component({
   selector: 'app-orders-table',
@@ -55,7 +56,10 @@ export class OrdersTableComponent {
     {prop: 'isExpress', name: 'Терміновий'},
   ];
   rows: Order[];
-  refreshSubject: BehaviorSubject<string> = new BehaviorSubject<string>('init orders');
+  refreshSubject: BehaviorSubject<string> = new BehaviorSubject<string>('Init orders');
+
+  filterByName: string;
+  filterByPhone: string;
 
   constructor(private apiService: ApiService, private windowService: NbWindowService) {
     this.page.number = 0;
@@ -78,7 +82,17 @@ export class OrdersTableComponent {
     console.log('Table page ', pageInfo);
     this.page.number = pageInfo.offset;
     this.loadingIndicator = true;
-    this.apiService.get(this.baseUrl + '/orders?page=' + this.page.number + '&size=' + this.page.size)
+    let params = new HttpParams();
+    params = params.set('page', this.page.number.toString());
+    params = params.set('size', this.page.size.toString());
+    if (this.filterByName) {
+      params = params.set('name', this.filterByName);
+    }
+    if (this.filterByPhone) {
+      params = params.set('phone', this.filterByPhone);
+    }
+    const url = this.baseUrl + '/orders?' + params.toString();
+    this.apiService.get(url)
       .subscribe((res: Page) => {
         console.log(res);
         this.page = res;
@@ -126,6 +140,7 @@ export class OrdersTableComponent {
     this.windowService.open(OrderFormComponent,
       {
         title: `Нове замовлення`, windowClass: 'form-order',
+        closeOnBackdropClick: false,
         context: {refresh: this.refreshSubject}
       });
   }
@@ -134,6 +149,7 @@ export class OrdersTableComponent {
     this.windowService.open(OrderFormComponent,
       {
         title: `Редагуй замовлення #` + this.selected[0].id, windowClass: 'form-order',
+        closeOnBackdropClick: false,
         context: {initialData: this.selected[0], refresh: this.refreshSubject}
       });
   }
@@ -147,11 +163,15 @@ export class OrdersTableComponent {
     }
   }
 
-  filterClient(event: any) {
-    console.log('Client', event);
+  filterClient(event: Event) {
+    console.log('Client', (event.target as HTMLInputElement).value);
+    this.filterByName = (event.target as HTMLInputElement).value;
+    this.setPage({offset: 0});
   }
 
   filterPhone(event: any) {
-    console.log('Tel', event);
+    console.log('Tel', (event.target as HTMLInputElement).value);
+    this.filterByPhone = (event.target as HTMLInputElement).value;
+    this.setPage({offset: 0});
   }
 }

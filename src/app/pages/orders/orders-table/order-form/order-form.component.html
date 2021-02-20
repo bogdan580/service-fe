@@ -10,19 +10,28 @@
   <div class="row">
     <div class="col form-group">
       <label>Клієнт
-        <input #nameInput nbInput type="text" name="pibInput"
-               fullWidth placeholder="Клієнт (ПІБ)"
-               [nbAutocomplete]="autoName" (input)="findClient()" [(ngModel)]="order.client.name">
+        <input nbInput type="text" name="pibInput" id="pibInput"
+               fullWidth placeholder="Клієнт (ПІБ)" autocomplete="off"
+               ngxDelayedInput (delayedInput)="findClientByName($event)" [delayTime]="700"
+               [nbAutocomplete]="autoName" [(ngModel)]="order.client.name">
         <nb-autocomplete #autoName (selectedChange)="onNameChange($event)">
-          <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option">
-            {{ option }}
+          <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option.name">
+            {{ option.name }}
           </nb-option>
         </nb-autocomplete>
       </label>
     </div>
     <div class="col form-group">
       <label>Телефон
-        <input nbInput type="tel" name="phoneInput" fullWidth placeholder="Телефон" [(ngModel)]="order.client.phone">
+        <input nbInput type="tel" name="phoneInput" id="phoneInput"
+               fullWidth placeholder="Телефон" autocomplete="off"
+               ngxDelayedInput (delayedInput)="findClientByPhone($event)" [delayTime]="700"
+               [nbAutocomplete]="autoPhone" [(ngModel)]="order.client.phone">
+        <nb-autocomplete #autoPhone (selectedChange)="onPhoneChange($event)">
+          <nb-option *ngFor="let option of clients" [value]="option.phone">
+            {{ option.phone }}
+          </nb-option>
+        </nb-autocomplete>
       </label>
     </div>
   </div>
@@ -42,7 +51,15 @@
     </div>
     <div class="col form-group">
       <label>Email
-        <input nbInput type="email" name="emailInput" fullWidth placeholder="Email" [(ngModel)]="order.client.email">
+        <input nbInput type="email" name="emailInput" id="emailInput"
+               fullWidth placeholder="Email" autocomplete="off"
+               ngxDelayedInput (delayedInput)="findClientByEmail($event)" [delayTime]="700"
+               [nbAutocomplete]="autoEmail" [(ngModel)]="order.client.email">
+        <nb-autocomplete #autoEmail (selectedChange)="onEmailChange($event)">
+          <nb-option *ngFor="let option of clients" [value]="option.email">
+            {{ option.email }}
+          </nb-option>
+        </nb-autocomplete>
       </label>
     </div>
   </div>
@@ -64,6 +81,9 @@
         <nb-select fullWidth name="statusInput" [(ngModel)]="order.status">
           <nb-option value="INCOMING">Прийнято</nb-option>
           <nb-option value="IN_REPAIR">В ремонті</nb-option>
+          <nb-option value="WITHOUT_REPAIR">Без ремонту</nb-option>
+          <nb-option value="READY">Готовий</nb-option>
+          <nb-option value="ISSUED">Виданий</nb-option>
         </nb-select>
       </label>
     </div>

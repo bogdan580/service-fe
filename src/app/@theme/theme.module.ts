@@ -37,6 +37,7 @@ import { DEFAULT_THEME } from './styles/theme.default';
 import { COSMIC_THEME } from './styles/theme.cosmic';
 import { CORPORATE_THEME } from './styles/theme.corporate';
 import { DARK_THEME } from './styles/theme.dark';
+import { DelayedInputDirective } from './directives/delayed-input/delayed-input.directive';
 
 const NB_MODULES = [
   NbLayoutModule,
@@ -70,8 +71,8 @@ const PIPES = [
 
 @NgModule({
   imports: [CommonModule, ...NB_MODULES],
-  exports: [CommonModule, ...PIPES, ...COMPONENTS],
-  declarations: [...COMPONENTS, ...PIPES],
+  exports: [CommonModule, ...PIPES, ...COMPONENTS, DelayedInputDirective],
+  declarations: [...COMPONENTS, ...PIPES, DelayedInputDirective],
 })
 export class ThemeModule {
   static forRoot(): ModuleWithProviders<ThemeModule> {

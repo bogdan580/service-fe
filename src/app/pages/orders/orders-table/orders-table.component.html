@@ -2,19 +2,21 @@
   <nb-card-header>
     Замовлення
     <input nbInput type="text" fieldSize="small" class="ml-2"
-           placeholder="Знайди клієнта (по ПІБ)"
-           (input)="filterClient($event)">
+           placeholder="Знайди клієнта (по ПІБ)" [(ngModel)]="filterByName"
+           ngxDelayedInput (delayedInput)="filterClient($event)" [delayTime]="700">
     <input nbInput type="text" fieldSize="small" class="ml-2"
-           placeholder="Знайди по телефону"
-           (input)="filterPhone($event)">
+           placeholder="Знайди по телефону" [(ngModel)]="filterByPhone"
+           ngxDelayedInput (delayedInput)="filterPhone($event)">
     <button class="change-columns-btn" nbButton status="basic" size="tiny" [nbPopover]="cols">Columns</button>
     <button nbButton status="success" class="float-right" size="tiny" (click)="openNewForm()">Нове замовлення</button>
-    <nb-select class="select-page-size" size="tiny" [(ngModel)]="page.size" (selectedChange)="setPage({offset: page.number})" selected="10">
+    <nb-select class="select-page-size" size="tiny" [(ngModel)]="page.size"
+               (selectedChange)="setPage({offset: page.number})" selected="10">
       <nb-option [value]="10">10</nb-option>
       <nb-option [value]="25">25</nb-option>
     </nb-select>
     <button nbButton status="info" class="edit-order-btn" size="tiny"
-            *ngIf="selected.length === 1" (click)="openEditForm()">Редагувати</button>
+            *ngIf="selected.length === 1" (click)="openEditForm()">Редагувати
+    </button>
   </nb-card-header>
   <nb-card-body>
 
