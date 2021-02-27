@@ -5,5 +5,5 @@
  */
 export const environment = {
   production: true,
-  REST_API_URL: 'http://localhost:8888',
+  REST_API_URL: 'https://service-online.mbohdan.com/api',
 };
